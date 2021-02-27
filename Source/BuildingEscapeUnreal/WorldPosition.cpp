@@ -18,8 +18,10 @@ void UWorldPosition::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FString Name = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Name);
+	FString ObjectName = GetOwner()->GetName();
+	FString ObjectPosition = GetOwner()->GetActorLocation().ToString();
+
+	UE_LOG(LogTemp, Warning, TEXT("%s is at position: %s"), *ObjectName, *ObjectPosition);
 }
 
 // Called every frame
