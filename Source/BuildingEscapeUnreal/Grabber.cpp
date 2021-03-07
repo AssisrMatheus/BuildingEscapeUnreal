@@ -27,6 +27,28 @@ void UGrabber::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s has no instance of UPhysicsHandleComponent"), *GetOwner()->GetName())
 	}
+
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent)
+	{
+		// UE_LOG(LogTemp, Warning, TEXT("%s found InputComponent"), *GetOwner()->GetName())
+		InputComponent->BindAction("Grab", EInputEvent::IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Grab", EInputEvent::IE_Released, this, &UGrabber::Release);
+	}
+	// else
+	// {
+	// 	UE_LOG(LogTemp, Error, TEXT("%s has no instance of UInputComponent"), *GetOwner()->GetName())
+	// }
+}
+
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Grabbed"))
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Released"))
 }
 
 // Called every frame
