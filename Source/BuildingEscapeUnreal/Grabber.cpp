@@ -33,7 +33,7 @@ void UGrabber::SetupInputComponent()
 void UGrabber::FindPhysicsHandle()
 {
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (!PhysicsHandle || PhysicsHandle == nullptr)
+	if (!PhysicsHandle)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s has no instance of UPhysicsHandleComponent"), *GetOwner()->GetName())
 	}
@@ -67,8 +67,9 @@ void UGrabber::Grab()
 
 	FVector ReachLocation = GetReachLocation(PlayerViewPointLocation, PlayerViewPointRotation);
 	FHitResult HitResult = GetFirstPhysicsBodyInReach(ReachLocation, PlayerViewPointLocation);
+	AActor *ActorHit = HitResult.GetActor();
 
-	if (HitResult.GetActor())
+	if (ActorHit && PhysicsHandle)
 	{
 		UPrimitiveComponent *ComponentToGrab = HitResult.GetComponent();
 		PhysicsHandle->GrabComponentAtLocation(ComponentToGrab, NAME_None, ReachLocation);
@@ -77,7 +78,7 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
-	if (PhysicsHandle->GrabbedComponent)
+	if (PhysicsHandle && PhysicsHandle->GrabbedComponent)
 	{
 		PhysicsHandle->ReleaseComponent();
 	}
@@ -97,7 +98,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (PhysicsHandle->GrabbedComponent)
+	if (PhysicsHandle && PhysicsHandle->GrabbedComponent)
 	{
 		FVector PlayerViewPointLocation;
 		FRotator PlayerViewPointRotation;
